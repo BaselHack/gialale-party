@@ -1,25 +1,34 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Input from '@material-ui/core/Input';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import AddIcon from '@material-ui/icons/Add';
+import Recorder from './components/Recorder';
+import Grid from '@material-ui/core/Grid';
+
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+  }
+  
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div className="App container-fluid">
+      <AppBar position="static" color="default">
+        <Toolbar>
+          <Typography variant="h6" color="inherit">
+            Gialale Party
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <Input placeholder="Enter your Link or Song" />
+      <Recorder />
+      <Button variant="fab" color="primary" aria-label="Add">
+        <AddIcon />
+      </Button>
       </div>
     );
   }
