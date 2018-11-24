@@ -1,7 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 let multer = require('multer');
-let upload = multer();
+let upload = multer({dest: 'sounds/'});
+
 // const fs = require('fs-sync'); kacke
 
 // const log4js = require('log4js') au kacke
@@ -67,7 +68,7 @@ app.get(`/getRoomCode/${roomString}`, function(req, res, err){
     // }  
 })
 
-app.post('/sound',upload.fields([]), function(req, res, err){
+app.post('/sound',upload.single('memo'), function(req, res, err){
     // res.send(`Check out this gialaleSound`);
     console.log(req.body)
     res.send(soundJSON);

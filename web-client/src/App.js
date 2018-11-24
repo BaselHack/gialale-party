@@ -32,7 +32,7 @@ class App extends Component {
 
     let formData = new FormData();
     formData.append('title', this.state.searchTerm);
-    formData.append('memo', this.state.audioChunks);
+    formData.append('memo', new Blob(this.state.audioChunks));
 
     for(var pair of formData.entries()) {
       console.log(pair[0]+ ', '+ pair[1]); 
