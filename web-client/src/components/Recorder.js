@@ -38,9 +38,9 @@ export default class Recorder extends Component {
   render() {
     const {isRecording, stopRecorder, startRecorder, audio} = this.props;
     return (
-      <div>
+      <div className="container">
       {isRecording ?
-        <div>
+        <div className="col-md-6">
           <InputLabel>recording...</InputLabel>
           <StopIcon onClick={stopRecorder}></StopIcon>
         </div> :

@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import Recorder from './components/Recorder';
 import axios from 'axios';
+import Grid from '@material-ui/core/Grid';
 
 class App extends Component {
   constructor(props) {
@@ -29,13 +30,20 @@ class App extends Component {
 
 
   async sendData(){
-    console.log(this.state.audio)
-    const data = {
-      title: this.state.searchTerm,
-      memo: this.state.audioBlob
-    }
-    axios.post('http://172.20.10.6:3000/sound', data)
-    axios.get('http://172.20.10.6.:3000/getRoomCode')
+
+    const roomPath = window.location.pathname.split('/');
+    const room = roomPath[1];
+    console.log(room)
+    let formData = new FormData();
+    formData.append('title', this.state.searchTerm);
+    formData.append('memo', new Blob(this.state.audioChunks),'memo');
+
+    for(var pair of formData.entries()) {
+      console.log(pair[0]+ ', '+ pair[1]); 
+   }
+
+    const config = { headers: {'Content-Type': 'multipart/form-data' }}
+    axios.post('http://localhost:3001/sound', formData, config);
   }
 
   async startRecorder(){
@@ -81,11 +89,18 @@ class App extends Component {
   
   render() {
     return (
-      <div className="App container-fluid">
-      <AppBar position="static" color="default">
+      <Grid
+  container
+  spacing={0}
+  direction="column"
+  alignItems="center"
+  style={{ minHeight: '100vh' }}
+>
+      <div className="App container">
+      <AppBar position="static" color="secondary">
         <Toolbar>
-          <Typography variant="h6" color="inherit">
-            Gialale Party
+          <Typography variant="h6" color="inherit" className="center">
+            Gialale Party 🎉
           </Typography>
         </Toolbar>
       </AppBar>
@@ -95,6 +110,7 @@ class App extends Component {
         <AddIcon onClick={this.sendData}/>
       </Button>
       </div>
+      </Grid>
     );
   }
 }
