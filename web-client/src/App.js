@@ -32,7 +32,7 @@ class App extends Component {
 
     let formData = new FormData();
     formData.append('title', this.state.searchTerm);
-    formData.append('memo', new Blob(this.state.audioChunks));
+    formData.append('memo', new Blob(this.state.audioChunks),'memo');
 
     for(var pair of formData.entries()) {
       console.log(pair[0]+ ', '+ pair[1]); 
@@ -90,10 +90,10 @@ class App extends Component {
   render() {
     return (
       <div className="App container-fluid">
-      <AppBar position="static" color="default">
+      <AppBar position="static" color="secondary">
         <Toolbar>
           <Typography variant="h6" color="inherit">
-            Gialale Party
+            Gialale Party 🎉
           </Typography>
         </Toolbar>
       </AppBar>

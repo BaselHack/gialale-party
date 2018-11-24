@@ -3,14 +3,16 @@ const bodyParser = require('body-parser');
 const http = require('http');
 const io = require('socket.io')();
 let multer = require('multer');
-let upload = multer({dest: 'sounds/'});
+const storage = multer.diskStorage(
+  {
+      destination: './sounds/',
+      filename: function ( req, file, cb ) {
+          cb( null, file.originalname+ '-' + Date.now()+".webm");
+      }
+  }
+);
 
-// const fs = require('fs-sync'); kacke
-
-// const log4js = require('log4js') au kacke
-// const fs = require('fs') ???
-
- //let ws = new WebSocket("ws://echo.websocket.org", "myProtocol");
+const upload = multer( { storage: storage } );
 
 let app = express();
 const port = process.env.PORT || 3001;
@@ -58,56 +60,24 @@ function rndString() {
   roomString = rndString()
   let roomJSON = {roomString : roomString};
 
-//   app.use((req, res , next) =>{
-    
-//     let log = `${roomString}`;
-
-//     console.log(log)
-//     fs.appendFile('server.log', log + '\n', (err)=>{
-//         if(err){
-//             console.log('Unable to append to server.log')
-//         }
-//     });
-
-//     next();
-// });
 
 app.get(`/getRoomCode`, function(req, res, err){
     res.json(roomJSON);
-
-    // if(err){
-    //     console.log('Unable to roomcode')
-    // }  
 })
 
 
 app.get(`/getRoomCode/${roomString}`, function(req, res, err){
-    res.send(`You are in the Gialale Room ${roomString}`)
-
-    // if(err){
-    //     console.log('Unable to room');
-    // }  
+    res.send(`You are in the Gialale Room ${roomString}`) 
 })
 
 app.post('/sound',upload.single('memo'), function(req, res, err){
-    // res.send(`Check out this gialaleSound`);
     console.log(req.body)
     res.send(soundJSON);
-
-    
-
-    // if(err){
-    //     console.log('Unable to post sound');
-    // }  
 })
 
 app.post(`/getRoomCode`), function(req,res,err){
     console.log('A Post from Gialale');
     res.send('Post Gialale');
-
-    // if(err){
-    //     console.log('Unable to post getRoom')
-    // }  
 }
 
 
