@@ -55,7 +55,13 @@ app.get(`/getRoomCode`, function(req, res, err){
 })
 
 app.post('/sound', function(req, res, err){
-    io.to(req.body.room).emit('newSong', req.body)
+    const data = {
+      room : req.body.room,
+      memo : req.files.memo,
+      title : req.body.title
+    }
+
+    io.to(req.body.room).emit('newSong', data)
 })
 
 app.post(`/getRoomCode`), function(req,res,err){
