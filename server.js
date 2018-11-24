@@ -1,5 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const http = require('http');
+const io = require('socket.io')();
 let multer = require('multer');
 let upload = multer({dest: 'sounds/'});
 
@@ -12,6 +14,29 @@ let upload = multer({dest: 'sounds/'});
 
 let app = express();
 const port = process.env.PORT || 3001;
+const socketPort = process.env.SOCKETPORT || 3002;
+
+let server =  app.listen(port, function(){
+    console.log('Gialaleserver on port: ' + port)
+})
+
+let webSocketServer =  app.listen(socketPort, function(){
+    console.log('Gialalewebsocketserver on port: ' + socketPort)
+})
+io.attach(webSocketServer);
+io.on('connection', function(socket){
+    socket.on('joinRoom' , roomString => {
+        socket.join(roomString);
+    });
+
+    console.log('a gialale has connected');
+})
+
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+  });
 
 app.use(bodyParser());
 
@@ -20,8 +45,6 @@ let soundString = 'exampleSound';
 let memo = "memoName"
 let soundJSON ={string : soundString, Blob : memo}
 
-
-
 function rndString() {
     let text = "";
     let chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -29,8 +52,6 @@ function rndString() {
     for (var i = 0; i < 20; i++)
       text += chars.charAt(Math.floor(Math.random() * chars.length));
 
-      console.log(text);
-  
     return text;
   }
 
@@ -89,9 +110,8 @@ app.post(`/getRoomCode`), function(req,res,err){
     // }  
 }
 
-let server =  app.listen(port, function(){
-    console.log('Gialaleserver on port: ' + port)
-})
+
+
 
 
 
