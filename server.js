@@ -1,4 +1,5 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 // const fs = require('fs-sync'); kacke
 
 // const log4js = require('log4js') au kacke
@@ -7,7 +8,9 @@ const express = require('express');
  //let ws = new WebSocket("ws://echo.websocket.org", "myProtocol");
 
 let app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
+
+app.use(bodyParser());
 
 let roomString = '';
 let soundString = 'exampleSound';
@@ -64,7 +67,7 @@ app.get(`/getRoomCode/${roomString}`, function(req, res, err){
 
 app.post('/sound', function(req, res, err){
     // res.send(`Check out this gialaleSound`);
-    console.log(req)
+    console.log(req.body)
     res.send(soundJSON);
 
     // if(err){

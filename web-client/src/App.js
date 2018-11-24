@@ -34,8 +34,7 @@ class App extends Component {
       title: this.state.searchTerm,
       memo: this.state.audioBlob
     }
-    axios.post('http://172.20.10.6:3000/sound', data)
-    axios.get('http://172.20.10.6.:3000/getRoomCode')
+    axios.post('http://localhost:3001/sound', data)
   }
 
   async startRecorder(){
