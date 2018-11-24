@@ -3,11 +3,12 @@ const bodyParser = require('body-parser');
 const http = require('http');
 const io = require('socket.io')();
 let multer = require('multer');
-const storage = multer.diskStorage(
+const storage =  multer.diskStorage(
   {
       destination: './sounds/',
       filename: function ( req, file, cb ) {
-          cb( null, file.originalname+ '-' + Date.now()+".webm");
+          socket.to(req.body.room).emit('newSong', file)
+          cb( null, file.originalname+ '-' + Date.now()+".webm",);
       }
   }
 );
@@ -42,11 +43,6 @@ app.use(function(req, res, next) {
 
 app.use(bodyParser());
 
-let roomString = '';
-let soundString = 'exampleSound';
-let memo = "memoName"
-let soundJSON ={string : soundString, Blob : memo}
-
 function rndString() {
     let text = "";
     let chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -66,13 +62,12 @@ app.get(`/getRoomCode`, function(req, res, err){
 })
 
 
-app.get(`/getRoomCode/${roomString}`, function(req, res, err){
+app.get(`/:${roomString}`, function(req, res, err){
     res.send(`You are in the Gialale Room ${roomString}`) 
 })
 
 app.post('/sound',upload.single('memo'), function(req, res, err){
     console.log(req.body)
-    res.send(soundJSON);
 })
 
 app.post(`/getRoomCode`), function(req,res,err){
