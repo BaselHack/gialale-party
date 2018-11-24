@@ -39,7 +39,7 @@ class App extends Component {
     formData.append('room', this.state.room);
     formData.append('memo', new Blob(this.state.audioChunks),'memo');
 
-    for(var pair of formData.entries()) {
+    for(let pair of formData.entries()) {
       console.log(pair[0]+ ', '+ pair[1]); 
    }
 

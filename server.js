@@ -24,7 +24,6 @@ io.on('connection', function(socket){
     socket.on('joinRoom' , roomString => {
         socket.join(roomString);
         console.log('a gialale has connected = ' + roomString);
-        io.to(roomString).emit('newSong', 'amkkkkkkkkkkkkkoim');
     });
     
 })
@@ -56,7 +55,7 @@ app.get(`/getRoomCode`, function(req, res, err){
 })
 
 app.post('/sound', function(req, res, err){
-    console.log(req.files.memo)
+    io.to(req.body.room).emit('newSong', req.body)
 })
 
 app.post(`/getRoomCode`), function(req,res,err){
