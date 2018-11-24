@@ -1,21 +1,14 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const http = require('http');
-const io = require('socket.io')();
-let multer = require('multer');
-const storage =  multer.diskStorage(
-  {
-      destination: './sounds/',
-      filename: function ( req, file, cb ) {
-          socket.to(req.body.room).emit('newSong', file)
-          cb( null, file.originalname+ '-' + Date.now()+".webm",);
-      }
-  }
-);
+const fs = require('fs');
+const socketio = require('socket.io');
+const fileUpload = require('express-fileupload');
 
-const upload = multer( { storage: storage } );
 
 let app = express();
+app.use(fileUpload()); 
+
 const port = process.env.PORT || 3001;
 const socketPort = process.env.SOCKETPORT || 3002;
 
@@ -26,13 +19,14 @@ let server =  app.listen(port, function(){
 let webSocketServer =  app.listen(socketPort, function(){
     console.log('Gialalewebsocketserver on port: ' + socketPort)
 })
-io.attach(webSocketServer);
+let io = socketio(webSocketServer);
 io.on('connection', function(socket){
     socket.on('joinRoom' , roomString => {
         socket.join(roomString);
+        console.log('a gialale has connected = ' + roomString);
+        io.to(roomString).emit('newSong', 'amkkkkkkkkkkkkkoim');
     });
-
-    console.log('a gialale has connected');
+    
 })
 
 app.use(function(req, res, next) {
@@ -44,30 +38,25 @@ app.use(function(req, res, next) {
 app.use(bodyParser());
 
 function rndString() {
-    let text = "";
-    let chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  
-    for (var i = 0; i < 20; i++)
-      text += chars.charAt(Math.floor(Math.random() * chars.length));
+  let text = "";
+  let chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOQQRSRTUVWXYZ0123456789";
 
-    return text;
-  }
+  for (var i = 0; i < 7; i++)
+    text += chars.charAt(Math.floor(Math.random() * chars.length));
 
-  roomString = rndString()
-  let roomJSON = {roomString : roomString};
-
+  return text;
+}
 
 app.get(`/getRoomCode`, function(req, res, err){
-    res.json(roomJSON);
+  let roomString = rndString();
+  let roomJSON = {roomString : roomString};
+
+  res.json(roomJSON);
+  console.log(roomJSON)
 })
 
-
-app.get(`/:${roomString}`, function(req, res, err){
-    res.send(`You are in the Gialale Room ${roomString}`) 
-})
-
-app.post('/sound',upload.single('memo'), function(req, res, err){
-    console.log(req.body)
+app.post('/sound', function(req, res, err){
+    console.log(req.files.memo)
 })
 
 app.post(`/getRoomCode`), function(req,res,err){
