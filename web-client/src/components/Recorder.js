@@ -1,80 +1,60 @@
 
 import React, { Component } from 'react'
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
 import MicIcon from '@material-ui/icons/Mic';
-import PauseIcon from '@material-ui/icons/Pause';
+import StopIcon from '@material-ui/icons/Stop';
+import PlayIcon from '@material-ui/icons/PlayArrow';
 import InputLabel from '@material-ui/core/InputLabel';
 
 export default class Recorder extends Component {
-
   constructor(props){
     super(props)
 
+    this.play = this.play.bind(this);
+    this.stop = this.stop.bind(this);
     this.state = {
-      isRecording: false,
-      isPlaying: false,
-      mediaRecorder: null,
-      stream: null,
-      audioChunks: [],
-      audio: null
+      isPlaying: false
     }
-    this.startRecorder = this.startRecorder.bind(this);
-    this.stopRecorder = this.stopRecorder.bind(this);
   }
 
+ stop(){
+   const {audio} = this.props;
+   audio.pause();
+   audio.currentTime = 0;
+   this.setState({
+     isPlaying:false
+   })
+ }
 
-  async startRecorder(){
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    const mediaRecorder = new MediaRecorder(stream);
-    const audioChunks = [];
-
-    mediaRecorder.addEventListener("dataavailable", event => {
-      audioChunks.push(event.data);
-    });
-    mediaRecorder.addEventListener("stop", event => {
-      const audioBlob = new Blob(this.state.audioChunks);
-      const audioUrl = URL.createObjectURL(audioBlob);
-      const audio = new Audio(audioUrl);
-      this.setState({audio: audio})
-      this.setState({isRecording:false})
-    });
-
-    mediaRecorder.start();
-    this.setState({
-      isRecording: true,
-      stream: stream,
-      mediaRecorder: mediaRecorder,
-      audioChunks: audioChunks
-    })
-
+ play(){
+    const {audio} = this.props;
+    this.setState({ isPlaying:true })
+    audio.play();
+    audio.addEventListener("ended", () =>{
+      audio.currentTime = 0;
+      this.setState({ isPlaying:false })
+   });
   }
-
-
-  stopRecorder(){
-    const mediaRecorder = this.state.mediaRecorder;
-    mediaRecorder.stop();
-    this.setState({
-      mediaRecorder: mediaRecorder
-    })
-  }
-
-
 
   render() {
+    const {isRecording, stopRecorder, startRecorder, audio} = this.props;
     return (
       <div>
-      {this.state.isRecording ?
+      {isRecording ?
         <div>
           <InputLabel>recording...</InputLabel>
-          <PauseIcon onClick={this.stopRecorder}></PauseIcon>
+          <StopIcon onClick={stopRecorder}></StopIcon>
         </div> :
+        !audio ? 
          <div>
          <InputLabel>Record your memo</InputLabel>
-         <MicIcon className="clickable" onClick={this.startRecorder}/>
+         <MicIcon className="clickable" onClick={startRecorder}/>
+         </div>
+         :
+         <div>
+         <InputLabel>File attached</InputLabel>
+         {this.state.isPlaying ? <StopIcon onClick={this.stop} /> : <PlayIcon className="clickable" onClick={this.play} />}
          </div>
         }
-      
       </div>
     )
   }
