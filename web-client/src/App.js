@@ -29,12 +29,21 @@ class App extends Component {
 
 
   async sendData(){
+
+    let formData = new FormData();
+    formData.append('title', this.state.searchTerm);
+    formData.append('memo', this.state.audioChunks);
+
+    for(var pair of formData.entries()) {
+      console.log(pair[0]+ ', '+ pair[1]); 
+   }
+
+    console.log(this.state);
     console.log(this.state.audio)
-    const data = {
-      title: this.state.searchTerm,
-      memo: this.state.audioBlob
-    }
-    axios.post('http://localhost:3001/sound', data)
+    console.log(this.state.audioChunks)
+    
+    const config = { headers: {'Content-Type': 'multipart/form-data' }}
+    axios.post('http://localhost:3001/sound', formData, config);
   }
 
   async startRecorder(){
