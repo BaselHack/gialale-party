@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import Recorder from './components/Recorder';
+import axios from 'axios';
 
 class App extends Component {
   constructor(props) {
@@ -28,7 +29,13 @@ class App extends Component {
 
 
   async sendData(){
-    console.log(this.state.audio.duration)
+    console.log(this.state.audio)
+    const data = {
+      title: this.state.searchTerm,
+      memo: this.state.audioBlob
+    }
+    axios.post('http://172.20.10.6:3000/sound', data)
+    axios.get('http://172.20.10.6.:3000/getRoomCode')
   }
 
   async startRecorder(){
@@ -82,10 +89,10 @@ class App extends Component {
           </Typography>
         </Toolbar>
       </AppBar>
-      <Input placeholder="Enter your Link or Song" onChange={this.onChange} value={this.state.searchTerm} />
+      <Input placeholder="Enter your song" onChange={this.onChange} value={this.state.searchTerm} />
       <Recorder startRecorder={this.startRecorder} stopRecorder={this.stopRecorder} isRecording={this.state.isRecording} audio={this.state.audio}/>
-      <Button variant="fab" color="primary" aria-label="Add" onClick={this.sendData}>
-        <AddIcon />
+      <Button variant="fab" color="secondary" aria-label="Add">
+        <AddIcon onClick={this.sendData}/>
       </Button>
       </div>
     );
