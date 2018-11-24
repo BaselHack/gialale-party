@@ -24,18 +24,19 @@ class App extends Component {
       stream: null,
       audioChunks: [],
       audio: null,
-      isRecording: false
+      isRecording: false,
+      room: ''
     }
   }
 
 
   async sendData(){
-
     const roomPath = window.location.pathname.split('/');
     const room = roomPath[1];
-    console.log(room)
+    this.setState({room: room});
     let formData = new FormData();
     formData.append('title', this.state.searchTerm);
+    formData.append('room', this.state.room);
     formData.append('memo', new Blob(this.state.audioChunks),'memo');
 
     for(var pair of formData.entries()) {
