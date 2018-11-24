@@ -2,8 +2,6 @@ import React from 'react';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import io from 'socket.io-client';
-/*import YouTube from 'simple-youtube-api';
-import { apiKey } from './settings';*/
 
 import NextSong from './components/NextSong';
 
@@ -17,22 +15,18 @@ class PlayScreen extends React.Component {
           title: "Rönnl",
         },
       ],
+      currentSong: null,
     }
   }
 
   componentDidMount() {
-    let socket = io('http://192.168.43.147:3002');
+    let socket = io('http://localhost:3002');
     socket.emit('joinRoom', this.props.roomCode);
 
-    /*socket.on('newSong', song => {
-      const youtube = new YouTube(apiKey);
-      youtube.videoById('https://www.youtube.com/watch?v=3odIdmuFfEY')
-          .then(video => {
-              console.log(`The video's title is ${video[0].title}`);
-          })
-          .catch(console.log);*/
-
-      //this.setState({playlist: ...this.state.playlist, song});
+    socket.on('newSong', song => {
+      let tempPlaylist = this.state.playlist;
+      tempPlaylist.add(song);
+      this.setState({playlist: tempPlaylist});
     });
   }
 

@@ -4,7 +4,7 @@ import { FontAwesome } from '@expo/vector-icons';
 
 class StartScreen extends React.Component {
   goButtonHandler() {
-    fetch('http://192.168.43.147:3001/getRoomCode')
+    fetch('http://localhost:3001/getRoomCode')
       .then((response) => response.json())
       .then((responseJson) => {
         this.props.goButtonHandler(responseJson.roomString);
