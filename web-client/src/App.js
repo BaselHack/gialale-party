@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import Recorder from './components/Recorder';
 import axios from 'axios';
+import Grid from '@material-ui/core/Grid';
 
 class App extends Component {
   constructor(props) {
@@ -30,6 +31,9 @@ class App extends Component {
 
   async sendData(){
 
+    const roomPath = window.location.pathname.split('/');
+    const room = roomPath[1];
+    console.log(room)
     let formData = new FormData();
     formData.append('title', this.state.searchTerm);
     formData.append('memo', new Blob(this.state.audioChunks),'memo');
@@ -38,10 +42,6 @@ class App extends Component {
       console.log(pair[0]+ ', '+ pair[1]); 
    }
 
-    console.log(this.state);
-    console.log(this.state.audio)
-    console.log(this.state.audioChunks)
-    
     const config = { headers: {'Content-Type': 'multipart/form-data' }}
     axios.post('http://localhost:3001/sound', formData, config);
   }
@@ -89,10 +89,17 @@ class App extends Component {
   
   render() {
     return (
-      <div className="App container-fluid">
+      <Grid
+  container
+  spacing={0}
+  direction="column"
+  alignItems="center"
+  style={{ minHeight: '100vh' }}
+>
+      <div className="App container">
       <AppBar position="static" color="secondary">
         <Toolbar>
-          <Typography variant="h6" color="inherit">
+          <Typography variant="h6" color="inherit" className="center">
             Gialale Party 🎉
           </Typography>
         </Toolbar>
@@ -103,6 +110,7 @@ class App extends Component {
         <AddIcon onClick={this.sendData}/>
       </Button>
       </div>
+      </Grid>
     );
   }
 }
