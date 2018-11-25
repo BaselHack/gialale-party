@@ -12,7 +12,7 @@ import Grid from '@material-ui/core/Grid';
 class App extends Component {
   constructor(props) {
     super(props);
-    
+
     this.onChange = this.onChange.bind(this);
     this.sendData = this.sendData.bind(this);
     this.startRecorder = this.startRecorder.bind(this);
@@ -40,11 +40,11 @@ class App extends Component {
     formData.append('memo', new Blob(this.state.audioChunks),'memo');
 
     for(let pair of formData.entries()) {
-      console.log(pair[0]+ ', '+ pair[1]); 
+      console.log(pair[0]+ ', '+ pair[1]);
    }
 
     const config = { headers: {'Content-Type': 'multipart/form-data' }}
-    axios.post('http://localhost:3001/sound', formData, config);
+    axios.post('http://192.168.43.140:3001/sound', formData, config);
   }
 
   async startRecorder(){
@@ -87,7 +87,7 @@ class App extends Component {
       searchTerm: e.target.value
     });
   }
-  
+
   render() {
     return (
       <Grid

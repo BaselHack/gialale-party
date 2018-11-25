@@ -9,9 +9,9 @@ const youtube = new YouTube('AIzaSyB2Fy0irdVm4Mm_HBJZTX3QObEF1C9g4uc');
 const ytdl = require('ytdl-core');
 
 
-let app = express();
-app.use(fileUpload()); 
 
+let app = express();
+app.use(fileUpload());
 
 const port = process.env.PORT || 3001;
 const socketPort = process.env.SOCKETPORT || 3002;
@@ -29,7 +29,7 @@ io.on('connection', function(socket){
         socket.join(roomString);
         console.log('a gialale has connected = ' + roomString);
     });
-    
+
 })
 
 app.use(function(req, res, next) {
@@ -62,7 +62,7 @@ app.post('/sound', function(req, res, err){
     const data = {
       room : req.body.room,
       memo : req.files.memo,
-      searchTerm : req.body.title
+      title : req.body.title
     }
     const memo_id = req.body.room + req.body.title + rndString();
     //fs.writeFile('./music/' + memo_id, req.files.memo + '.webm');
@@ -99,8 +99,11 @@ app.get('/music/:track_id',(req,res) => {
 app.get('/music/:memo_id', (req,res) => {
   res.sendFile(__dirname + '/music/' +req.params.memo_id + '.webm');
 })
+<<<<<<< HEAD
 */
 
 
 
   
+=======
+>>>>>>> 89bd4d99e611a37d3e891e71859c1735ea7034cd
