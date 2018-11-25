@@ -5,9 +5,9 @@ class NextSong extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Image style={styles.image} source={require("../../assets/splash.png")}/>
+        <Image style={styles.image} source={{uri: this.props.song.video.snippet.thumbnails.high.url}}/>
         <Text style={styles.title}>
-          {this.props.title}
+          {this.props.song.title}
         </Text>
       </View>
     );
@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginRight: 20,
     height: 70,
-    backgroundColor: "lightblue",
+    //backgroundColor: "lightblue",
   },
   image: {
     height: 45,
