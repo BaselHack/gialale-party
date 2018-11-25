@@ -29,14 +29,14 @@ class PlayScreen extends React.Component {
       if (this.state.firstSong) {
         song = {
           title: "ТРИ ПОЛОСКИ / KOLM TRIIPU / THREE STRIPES",
-          image: "http://i3.ytimg.com/vi/QiFBgtgUtfw/hqdefault.jpg"
+          image: "https://img.youtube.com/vi/QiFBgtgUtfw/0.jpg"
         }
         this.setState({firstSong: false});
         this.triPoloskiRef.playAsync();
       } else {
         song = {
           title: "Darude - Sandstorm",
-          image: "http://i3.ytimg.com/vi/y6120QOlsfU/hqdefault.jpg"
+          image: "https://img.youtube.com/vi/y6120QOlsfU/0.jpg"
         }
       }
       tempPlaylist.push(song);
@@ -110,7 +110,7 @@ class PlayScreen extends React.Component {
           <TouchableOpacity style={styles.topButton} onPress={()=>{this.props.backButtonHandler()}}>
             <FontAwesome name="arrow-left" size={45} color="black" />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.topButton} onPress={()=>{Linking.openURL(`whatsapp://send?text=http://192.168.43.140:3001/${this.props.roomCode}`);}}>
+          <TouchableOpacity style={styles.topButton} onPress={()=>{Linking.openURL(`whatsapp://send?text=http://192.168.43.140:3000/${this.props.roomCode}`);}}>
             <FontAwesome name="share-alt" size={45} color="black" />
           </TouchableOpacity>
         </View>

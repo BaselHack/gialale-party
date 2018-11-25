@@ -19,7 +19,7 @@ class StartScreen extends React.Component {
       <View style={styles.container}>
         <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'}}>
           <TouchableOpacity style={styles.goButton} onPress={()=>{this.goButtonHandler()}}>
-            <Text style={styles.textStyle}>GO</Text>
+            <Text style={styles.textStyle}> 🎉</Text>
           </TouchableOpacity>
         </View>
 
