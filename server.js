@@ -65,14 +65,14 @@ app.post('/sound', function(req, res, err){
       searchTerm : req.body.title
     }
     const memo_id = req.body.room + req.body.title + rndString();
-    fs.writeFile('./music/' + memo_id, req.files.memo + '.webm');
+    //fs.writeFile('./music/' + memo_id, req.files.memo + '.webm');
     youtube.searchVideos(data.searchTerm, 1)
     .then(result => {
         console.log(`The video's title is ${result[0].title}`);
         data.title = result[0].title;
         data.id = result[0].id;
         data.video = result[0].raw;
-        data.memo_id = memo_id;
+        //data.memo_id = memo_id;
         console.log(result[0])
 
         ytdl('http://www.youtube.com/watch?v=' +data.id).pipe(fs.createWriteStream('music/'+data.id + '.mp4', {quality: 'lowest', format: 'mp3'}));
@@ -95,10 +95,11 @@ app.get('/music/:track_id',(req,res) => {
   res.sendFile(__dirname + '/music/' + req.params.track_id + '.mp4');
 })
 
+/*
 app.get('/music/:memo_id', (req,res) => {
   res.sendFile(__dirname + '/music/' +req.params.memo_id + '.webm');
 })
-
+*/
 
 
 
