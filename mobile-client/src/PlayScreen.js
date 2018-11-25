@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image, Linking } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import io from 'socket.io-client';
 import { Video, FileSystem } from 'expo';
@@ -110,7 +110,7 @@ class PlayScreen extends React.Component {
           <TouchableOpacity style={styles.topButton} onPress={()=>{this.props.backButtonHandler()}}>
             <FontAwesome name="arrow-left" size={45} color="black" />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.topButton} onPress={()=>{alert("share")}}>
+          <TouchableOpacity style={styles.topButton} onPress={()=>{Linking.openURL(`whatsapp://send?text=http://192.168.43.140:3001/${this.props.roomCode}`);}}>
             <FontAwesome name="share-alt" size={45} color="black" />
           </TouchableOpacity>
         </View>
