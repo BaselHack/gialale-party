@@ -4,6 +4,10 @@ const http = require('http');
 const fs = require('fs');
 const socketio = require('socket.io');
 const fileUpload = require('express-fileupload');
+const YouTube = require('simple-youtube-api');
+const youtube = new YouTube('AIzaSyB2Fy0irdVm4Mm_HBJZTX3QObEF1C9g4uc');
+const ytdl = require('ytdl-core');
+
 
 
 let app = express();
@@ -60,11 +64,37 @@ app.post('/sound', function(req, res, err){
       memo : req.files.memo,
       title : req.body.title
     }
+    const memo_id = req.body.room + req.body.title + rndString();
+    fs.writeFile('./music/' + memo_id, req.files.memo + '.webm');
+    youtube.searchVideos(data.searchTerm, 1)
+    .then(result => {
+        console.log(`The video's title is ${result[0].title}`);
+        data.title = result[0].title;
+        data.id = result[0].id;
+        data.video = result[0].raw;
+        data.memo_id = memo_id;
+        console.log(result[0])
 
-    io.to(req.body.room).emit('newSong', data)
+        ytdl('http://www.youtube.com/watch?v=' +data.id).pipe(fs.createWriteStream('music/'+data.id + '.mp4', {quality: 'lowest', format: 'mp3'}));
+
+        const soundTrack = fs.readFile('./music/' +data.id + '.mp4',(err,response) => {
+          data.file = response;
+          io.to(data.room).emit('newSong', data);
+        });
+
+      })
+    .catch(console.log);
 })
 
 app.post(`/getRoomCode`), function(req,res,err){
     console.log('A Post from Gialale');
     res.send('Post Gialale');
 }
+
+app.get('/music/:track_id',(req,res) => {
+  res.sendFile(__dirname + '/music/' + req.params.track_id + '.mp4');
+})
+
+app.get('/music/:memo_id', (req,res) => {
+  res.sendFile(__dirname + '/music/' +req.params.memo_id + '.webm');
+})
