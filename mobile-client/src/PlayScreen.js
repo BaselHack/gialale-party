@@ -108,10 +108,10 @@ class PlayScreen extends React.Component {
 
         <View style={styles.topPanel}>
           <TouchableOpacity style={styles.topButton} onPress={()=>{this.props.backButtonHandler()}}>
-            <FontAwesome name="arrow-left" size={45} color="black" />
+            <FontAwesome name="arrow-left" size={45} color="#FD175B" />
           </TouchableOpacity>
           <TouchableOpacity style={styles.topButton} onPress={()=>{Linking.openURL(`whatsapp://send?text=http://192.168.43.140:3000/${this.props.roomCode}`);}}>
-            <FontAwesome name="share-alt" size={45} color="black" />
+            <FontAwesome name="share-alt" size={45} color="#FD175B" />
           </TouchableOpacity>
         </View>
 
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    backgroundColor: "black",
+    backgroundColor: "#FD175B",
   },
   controlButton: {
 
