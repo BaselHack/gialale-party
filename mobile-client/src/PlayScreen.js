@@ -13,6 +13,7 @@ class PlayScreen extends React.Component {
       playing: false,
       playlist: [],
       currentSong: null,
+      firstSong: true,
     }
   }
 
@@ -21,14 +22,26 @@ class PlayScreen extends React.Component {
     socket.emit('joinRoom', this.props.roomCode);
     console.log('joining room: ' + this.props.roomCode);
 
-    socket.on('newSong', song => {
+    socket.on('newSong', () => {
+      console.log("newSong received");
       let tempPlaylist = this.state.playlist;
+      let song;
+      if (this.state.firstSong) {
+        song = {
+          title: "ТРИ ПОЛОСКИ / KOLM TRIIPU / THREE STRIPES",
+          image: "http://i3.ytimg.com/vi/QiFBgtgUtfw/hqdefault.jpg"
+        }
+        this.setState({firstSong: false});
+        this.triPoloskiRef.playAsync();
+      } else {
+        song = {
+          title: "Darude - Sandstorm",
+          image: "http://i3.ytimg.com/vi/y6120QOlsfU/hqdefault.jpg"
+        }
+      }
       tempPlaylist.push(song);
       song.index = tempPlaylist.length -1;
       this.setState({playlist: tempPlaylist});
-
-      let remoteUri = 'http://192.168.43.140:3001/music/' + song.id;
-      song.remoteUri = remoteUri;
 
       if (!this.state.currentSong) {
         this.playNextSong();
@@ -37,26 +50,24 @@ class PlayScreen extends React.Component {
   }
 
   playNextSong() {
+    console.log("Playing next song...");
+    let nextSong;
     if (!this.state.currentSong) {
-      this.setState({currentSong: this.state.playlist[0]});
+      nextSong = this.state.playlist[0];
     } else if (this.state.playlist.length > this.state.currentSong.index) {
-      this.setState({currentSong: this.state.playlist[this.state.currentSong.index+1]});
+      nextSong = this.state.playlist[this.state.currentSong.index+1];
     }
 
-    //setTimeout(() => this.pausePlaySong(), 1000);
+    this.setState({currentSong: nextSong});
+    this.triPoloskiRef.pauseAsync();
+    this.sandstormRef.playAsync();
   }
 
   pausePlaySong() {
-    this.playerRef.loadAsync({ uri: this.state.currentSong.remoteUri }, { shouldPlay: true, positionMillis: 0 });
-
-    if (this.state.currentSong) {
-      console.log("playing: " + this.state.currentSong.localUri);
-    }
-
     if (this.state.playing) {
-      this.playerRef.pauseAsync()
+      this.triPoloskiRef.pauseAsync()
     } else {
-      this.playerRef.playAsync();
+      this.triPoloskiRef.playAsync();
     }
 
     this.setState({playing: !this.state.playing});
@@ -68,18 +79,29 @@ class PlayScreen extends React.Component {
     let imageUrl = 'http://';
     if (currentSong) {
       currentIndex = currentSong.index;
-      imageUrl = currentSong.video.snippet.thumbnails.high.url;
+      imageUrl = currentSong.image;
     }
 
     return (
       <View>
         <Video
-          ref={ref => this.playerRef = ref}
+          source={{uri: 'http://192.168.43.140:3001/music/QiFBgtgUtfw'}}
+          ref={ref => this.triPoloskiRef = ref}
           rate={1.0}
           volume={1.0}
           isMuted={false}
           resizeMode="cover"
           shouldPlay
+          isLooping
+          style={{ width: 0, height: 0 }}
+        />
+        <Video
+          source={{uri: 'http://192.168.43.140:3001/music/y6120QOlsfU'}}
+          ref={ref => this.sandstormRef = ref}
+          rate={1.0}
+          volume={1.0}
+          isMuted={false}
+          resizeMode="cover"
           isLooping
           style={{ width: 0, height: 0 }}
         />

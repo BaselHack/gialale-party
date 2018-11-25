@@ -5,7 +5,7 @@ class NextSong extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Image style={styles.image} source={{uri: this.props.song.video.snippet.thumbnails.high.url}}/>
+        <Image style={styles.image} source={{uri: this.props.song.image}}/>
         <Text style={styles.title}>
           {this.props.song.title}
         </Text>
