@@ -44,7 +44,7 @@ class App extends Component {
    }
 
     const config = { headers: {'Content-Type': 'multipart/form-data' }}
-    axios.post('http://localhost:3001/sound', formData, config);
+    axios.post('http://192.168.43.140:3001/sound', formData, config);
   }
 
   async startRecorder(){
