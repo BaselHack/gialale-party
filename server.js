@@ -99,11 +99,4 @@ app.get('/music/:track_id',(req,res) => {
 app.get('/music/:memo_id', (req,res) => {
   res.sendFile(__dirname + '/music/' +req.params.memo_id + '.webm');
 })
-<<<<<<< HEAD
 */
-
-
-
-  
-=======
->>>>>>> 89bd4d99e611a37d3e891e71859c1735ea7034cd
