@@ -4,10 +4,12 @@ const http = require('http');
 const fs = require('fs');
 const socketio = require('socket.io');
 const fileUpload = require('express-fileupload');
-
+const YouTube = require('simple-youtube-api');
+const youtube = new YouTube('AIzaSyB2Fy0irdVm4Mm_HBJZTX3QObEF1C9g4uc');
 
 let app = express();
 app.use(fileUpload()); 
+
 
 const port = process.env.PORT || 3001;
 const socketPort = process.env.SOCKETPORT || 3002;
@@ -58,10 +60,18 @@ app.post('/sound', function(req, res, err){
     const data = {
       room : req.body.room,
       memo : req.files.memo,
-      title : req.body.title
+      searchTerm : req.body.title
     }
-
-    io.to(req.body.room).emit('newSong', data)
+    youtube.searchVideos(data.searchTerm, 1)
+    .then(result => {
+        console.log(`The video's title is ${result[0].title}`);
+        data.title = result[0].title;
+        data.id = result[0].id;
+        console.log(result[0])
+        io.to(req.body.room).emit('newSong', data);
+        console.log(data);
+    })
+    .catch(console.log);
 })
 
 app.post(`/getRoomCode`), function(req,res,err){
